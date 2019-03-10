@@ -94,13 +94,16 @@ def _generate_stack_inputs(heads, types, prior_order):
     return stacked_heads, children, siblings, stacked_types, skip_connect
 
 
-def read_stacked_data(source_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet, max_size=None, normalize_digits=True, prior_order='deep_first',kkma=False,end_to_end=False):
+def read_stacked_data(source_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet,
+                      max_size=None, normalize_digits=True, prior_order='deep_first',kkma=False,
+                      end_to_end=False, syllable_positions=None):
     data = [[] for _ in _buckets]
     max_lemma_length = [0 for _ in _buckets]
     max_char_length = [0 for _ in _buckets]
     print('Reading data from %s' % source_path)
     counter = 0
-    reader = CoNLLXReader(source_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet,kkma,end_to_end)
+    reader = CoNLLXReader(source_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet,
+                          kkma, end_to_end,syllable_positions)
     inst = reader.getNext(normalize_digits=normalize_digits, symbolic_root=True, symbolic_end=False)
     while inst is not None and (not max_size or counter < max_size):
         counter += 1
@@ -139,11 +142,16 @@ def read_stacked_data(source_path, word_alphabet, char_alphabet, pos_alphabet, t
 
 
 def read_stacked_data_to_variable(source_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet,
-                                  max_size=None, normalize_digits=True, prior_order='deep_first', use_gpu=False,kkma=False,end_to_end=False):
+                                  max_size=None, normalize_digits=True, prior_order='deep_first', use_gpu=False,kkma=False,
+                                  end_to_end=False,syllable_positions=None):
 
-    data, max_lemma_length, max_char_length = read_stacked_data(source_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet, max_size=max_size, normalize_digits=normalize_digits, prior_order=prior_order,kkma=kkma,end_to_end=end_to_end)
+    data, max_lemma_length, max_char_length = read_stacked_data(source_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet,
+                                                                max_size=max_size, normalize_digits=normalize_digits, prior_order=prior_order,
+                                                                kkma=kkma,end_to_end=end_to_end,syllable_positions=syllable_positions)
     if end_to_end:
-        word_alphabet,pre_alphabet,post_alphabet,post_bi_alphabet,pre_bi_alphabet = word_alphabet
+        word_alphabet, (syllable_begin_alphabet, syllable_begin2_alphabet,\
+            syllable_last_alphabet, syllable_last2_alphabet) = word_alphabet
+
     bucket_sizes = [len(data[b]) for b in range(len(_buckets))]
 
     data_variable = []
@@ -159,10 +167,11 @@ def read_stacked_data_to_variable(source_path, word_alphabet, char_alphabet, pos
         char_length = min(utils.MAX_CHAR_LENGTH, max_char_length[bucket_id] + utils.NUM_CHAR_PAD)
         if end_to_end:
             wid_inputs = np.empty([bucket_size,bucket_length],dtype=np.int64)
-            pre_wid_inputs = np.empty([bucket_size,bucket_length],dtype=np.int64)
-            post_wid_inputs = np.empty([bucket_size,bucket_length],dtype=np.int64)
-            post_bi_wid_inputs = np.empty([bucket_size,bucket_length],dtype=np.int64)
-            pre_bi_wid_inputs = np.empty([bucket_size,bucket_length],dtype=np.int64)
+            syllable_begin_wid_inputs = np.empty([bucket_size,bucket_length],dtype=np.int64)
+            syllable_begin2_wid_inputs = np.empty([bucket_size,bucket_length],dtype=np.int64)
+            syllable_last_wid_inputs = np.empty([bucket_size,bucket_length],dtype=np.int64)
+            syllable_last2_wid_inputs = np.empty([bucket_size,bucket_length],dtype=np.int64)
+
             cid_inputs = np.empty([bucket_size,bucket_length,char_length],dtype=np.int64)
         else:
             wid_inputs = np.empty([bucket_size, bucket_length, lemma_length], dtype=np.int64)
@@ -175,10 +184,12 @@ def read_stacked_data_to_variable(source_path, word_alphabet, char_alphabet, pos
         masks_e = np.zeros([bucket_size, bucket_length], dtype=np.float32)
         if end_to_end:
             single = np.zeros([bucket_size,bucket_length],dtype=np.int64)
-            pre_single = np.zeros([bucket_size,bucket_length],dtype=np.int64)
-            post_single = np.zeros([bucket_size,bucket_length],dtype=np.int64)
-            post_bi_single = np.zeros([bucket_size,bucket_length],dtype=np.int64)
-            pre_bi_single = np.zeros([bucket_size,bucket_length],dtype=np.int64)
+
+            syllable_begin_single = np.zeros([bucket_size,bucket_length],dtype=np.int64)
+            syllable_begin2_single = np.zeros([bucket_size,bucket_length],dtype=np.int64)
+
+            syllable_last_single = np.zeros([bucket_size,bucket_length],dtype=np.int64)
+            syllable_last2_single = np.zeros([bucket_size,bucket_length],dtype=np.int64)
         else:
             single = np.zeros([bucket_size, bucket_length, lemma_length], dtype=np.int64)
         lengths_e = np.empty(bucket_size, dtype=np.int64)
@@ -196,7 +207,8 @@ def read_stacked_data_to_variable(source_path, word_alphabet, char_alphabet, pos
 
         for i, inst in enumerate(data[bucket_id]):
             if end_to_end:
-                wids,pre_wids,post_wids,post_bi_wids,pre_bi_wids,cid_seqs,pids,hids,tids,stack_hids,chids,ssids,stack_tids,skip_ids,sentence = inst
+                wids,syllable_begin_wids,syllable_begin2_wids,syllable_last_wids,syllable_last2_wids,cid_seqs\
+                    ,pids,hids,tids,stack_hids,chids,ssids,stack_tids,skip_ids,sentence = inst
             else:
                 wids, cid_seqs, pids, hids, tids, stack_hids, chids, ssids, stack_tids, skip_ids, sentence = inst
             inst_size = len(wids)
@@ -205,14 +217,14 @@ def read_stacked_data_to_variable(source_path, word_alphabet, char_alphabet, pos
             if end_to_end:
                 wid_inputs[i,:inst_size] = wids
                 wid_inputs[i,inst_size:] = PAD_ID_WORD
-                pre_wid_inputs[i,:inst_size] = pre_wids
-                pre_wid_inputs[i,inst_size:] = PAD_ID_WORD
-                post_wid_inputs[i,:inst_size] = post_wids
-                post_wid_inputs[i,inst_size:] = PAD_ID_WORD
-                post_bi_wid_inputs[i,:inst_size] = post_bi_wids
-                post_bi_wid_inputs[i,inst_size:] = PAD_ID_WORD
-                pre_bi_wid_inputs[i,:inst_size] = pre_bi_wids
-                pre_bi_wid_inputs[i,inst_size:] = PAD_ID_WORD
+                syllable_begin_wid_inputs[i,:inst_size] = syllable_begin_wids
+                syllable_begin_wid_inputs[i,inst_size:] = PAD_ID_WORD
+                syllable_last_wid_inputs[i,:inst_size] = syllable_last_wids
+                syllable_last_wid_inputs[i,inst_size:] = PAD_ID_WORD
+                syllable_last2_wid_inputs[i,:inst_size] = syllable_last2_wids
+                syllable_last2_wid_inputs[i,inst_size:] = PAD_ID_WORD
+                syllable_begin2_wid_inputs[i,:inst_size] = syllable_begin2_wids
+                syllable_begin2_wid_inputs[i,inst_size:] = PAD_ID_WORD
                 for c,cids in enumerate(cid_seqs):
                     c_len = len(cids)
                     cid_inputs[i,c,:c_len] = cids
@@ -249,18 +261,20 @@ def read_stacked_data_to_variable(source_path, word_alphabet, char_alphabet, pos
                 for j,lids in enumerate(wids):
                     if word_alphabet.is_singleton(lids):
                         single[i,j]=1
-                for j,lids in enumerate(pre_wids):
-                    if pre_alphabet.is_singleton(lids):
-                        pre_single[i,j]=1
-                for j, lids in enumerate(post_wids):
-                    if post_alphabet.is_singleton(lids):
-                        post_single[i, j] = 1
-                for j, lids in enumerate(post_bi_wids):
-                    if post_bi_alphabet.is_singleton(lids):
-                        post_bi_single[i,j]=1
-                for j, lids in enumerate(pre_bi_wids):
-                    if pre_bi_alphabet.is_singleton(lids):
-                        pre_bi_single[i,j]=1
+                for j,lids in enumerate(syllable_begin_wids):
+                    if syllable_begin_alphabet.is_singleton(lids):
+                        syllable_begin_single[i,j]=1
+
+                for j, lids in enumerate(syllable_begin2_wids):
+                    if syllable_begin2_alphabet.is_singleton(lids):
+                        syllable_begin2_single[i, j] = 1
+
+                for j, lids in enumerate(syllable_last_wids):
+                    if syllable_last_alphabet.is_singleton(lids):
+                        syllable_last_single[i, j] = 1
+                for j, lids in enumerate(syllable_last2_wids):
+                    if syllable_last2_alphabet.is_singleton(lids):
+                        syllable_last2_single[i,j]=1
 
             else:
                 for j, lids in enumerate(wids):
@@ -291,10 +305,10 @@ def read_stacked_data_to_variable(source_path, word_alphabet, char_alphabet, pos
 
         words = torch.from_numpy(wid_inputs)
         if end_to_end:
-            pre_words = torch.from_numpy(pre_wid_inputs)
-            post_words = torch.from_numpy(post_wid_inputs)
-            post_bi_words = torch.from_numpy(post_bi_wid_inputs)
-            pre_bi_words = torch.from_numpy(pre_bi_wid_inputs)
+            syllable_begins = torch.from_numpy(syllable_begin_wid_inputs)
+            syllable_begin2s = torch.from_numpy(syllable_begin2_wid_inputs)
+            syllable_lasts = torch.from_numpy(syllable_last_wid_inputs)
+            syllable_last2s = torch.from_numpy(syllable_last2_wid_inputs)
 
         chars = torch.from_numpy(cid_inputs)
         pos = torch.from_numpy(pid_inputs)
@@ -303,11 +317,11 @@ def read_stacked_data_to_variable(source_path, word_alphabet, char_alphabet, pos
         masks_e = torch.from_numpy(masks_e)
         single = torch.from_numpy(single)
         if end_to_end:
-            pre_single = torch.from_numpy(pre_single)
-            post_single = torch.from_numpy(post_single)
-            post_bi_single = torch.from_numpy(post_bi_single)
-            pre_bi_single = torch.from_numpy(pre_bi_single)
+            syllable_begin_single = torch.from_numpy(syllable_begin_single)
+            syllable_begin2_single = torch.from_numpy(syllable_begin2_single)
 
+            syllable_last_single = torch.from_numpy(syllable_last_single)
+            syllable_last2_single = torch.from_numpy(syllable_last2_single)
         lengths_e = torch.from_numpy(lengths_e)
 
         stacked_heads = torch.from_numpy(stack_hid_inputs)
@@ -335,9 +349,12 @@ def read_stacked_data_to_variable(source_path, word_alphabet, char_alphabet, pos
             masks_d = masks_d.cuda()
             lengths_d = lengths_d.cuda()
         if end_to_end:
-            data_variable.append(((words,pre_words,post_words,post_bi_words,pre_bi_words, chars, pos, heads, types, masks_e, single,pre_single,post_single,post_bi_single,pre_bi_single, lengths_e),
+            data_variable.append(((words,syllable_begins,syllable_begin2s,syllable_lasts,syllable_last2s, chars, pos, heads, types,
+                                   masks_e, single,syllable_begin_single,syllable_begin2_single,
+                                   syllable_last_single,syllable_last2_single,
+                                   lengths_e),
                               (stacked_heads, children, siblings, stacked_types, skip_connect, masks_d, lengths_d),
-                              sentences ))
+                              sentences))
 
         else:
             data_variable.append(((words, chars, pos, heads, types, masks_e, single, lengths_e),
@@ -362,7 +379,7 @@ def get_batch_stacked_variable(data, batch_size, unk_replace=0., use_gpu=False,e
 
     data_encoder, data_decoder, _ = data_variable[bucket_id]
     if end_to_end:
-        words,pre_words,post_words,post_bi_words,pre_bi_words, chars, pos, heads, types, masks_e, single, pre_single, post_single,post_bi_single,pre_bi_single, lengths_e = data_encoder
+        words,syllable_begins,syllable_begin2s,syllable_lasts,syllable_last2s, chars, pos, heads, types, masks_e, single, syllable_begin_single, syllable_last_single,syllable_last2_single,syllable_begin2_single, lengths_e = data_encoder
     else:
         words, chars, pos, heads, types, masks_e, single, lengths_e = data_encoder
     stacked_heads, children, siblings, stacked_types, skip_connect, masks_d, lengths_d = data_decoder
@@ -377,32 +394,34 @@ def get_batch_stacked_variable(data, batch_size, unk_replace=0., use_gpu=False,e
     words = words[index]
 
     if end_to_end:
-        pre_words = pre_words[index]
-        post_words = post_words[index]
-        post_bi_words = post_bi_words[index]
-        pre_bi_words = pre_bi_words[index]
+        syllable_begins = syllable_begins[index]
+        syllable_begin2s = syllable_begin2s[index]
+        syllable_lasts = syllable_lasts[index]
+        syllable_last2s = syllable_last2s[index]
     if unk_replace:
         if end_to_end:
             ones = torch.LongTensor(single.data.new(batch_size,bucket_length).fill_(1))
             noise = torch.LongTensor(masks_e.data.new(batch_size,bucket_length).bernoulli_(unk_replace).long())
 
-            pre_ones = torch.LongTensor(pre_single.data.new(batch_size,bucket_length).fill_(1))
-            pre_noise = torch.LongTensor(masks_e.data.new(batch_size,bucket_length).bernoulli_(unk_replace).long())
+            syllable_begin_one = torch.LongTensor(syllable_begin_single.data.new(batch_size,bucket_length).fill_(1))
+            syllable_begin_noise = torch.LongTensor(masks_e.data.new(batch_size,bucket_length).bernoulli_(unk_replace).long())
 
-            post_ones = torch.LongTensor(post_single.data.new(batch_size,bucket_length).fill_(1))
-            post_noise = torch.LongTensor(masks_e.data.new(batch_size,bucket_length).bernoulli_(unk_replace).long())
+            syllable_begin2_one = torch.LongTensor(syllable_begin2_single.data.new(batch_size,bucket_length).fill_(1))
+            syllable_begin2_noise = torch.LongTensor(masks_e.data.new(batch_size,bucket_length).bernoulli_(unk_replace).long())
 
-            post_bi_ones = torch.LongTensor(post_bi_single.data.new(batch_size,bucket_length).fill_(1))
-            post_bi_noise = torch.LongTensor(masks_e.data.new(batch_size,bucket_length).bernoulli_(unk_replace).long())
+            syllable_last_one = torch.LongTensor(syllable_last_single.data.new(batch_size,bucket_length).fill_(1))
+            syllable_last_noise = torch.LongTensor(masks_e.data.new(batch_size,bucket_length).bernoulli_(unk_replace).long())
 
-            pre_bi_ones = torch.LongTensor(pre_bi_single.data.new(batch_size,bucket_length).fill_(1))
-            pre_bi_noise = torch.LongTensor(masks_e.data.new(batch_size,bucket_length).bernoulli_(unk_replace).long())
+            syllable_last2_one = torch.LongTensor(syllable_last2_single.data.new(batch_size,bucket_length).fill_(1))
+            syllable_last2_noise = torch.LongTensor(masks_e.data.new(batch_size,bucket_length).bernoulli_(unk_replace).long())
 
             words = words * (ones - single[index] * noise)
-            pre_words = pre_words * (pre_ones - pre_single[index] * pre_noise)
-            post_words = post_words * (post_ones - post_single[index] * post_noise)
-            post_bi_words = post_bi_words * (post_bi_ones - post_bi_single[index] * post_bi_noise)
-            pre_bi_words = pre_bi_words * (pre_bi_ones - pre_bi_single[index] * pre_bi_noise)
+
+            syllable_begins = syllable_begins * (syllable_begin_one - syllable_begin_single[index] * syllable_begin_noise)
+            syllable_begin2s = syllable_begin2s * (syllable_begin2_one - syllable_begin2_single[index] * syllable_begin2_noise)
+
+            syllable_lasts = syllable_lasts * (syllable_last_one - syllable_last_single[index] * syllable_last_noise)
+            syllable_last2s = syllable_last2s * (syllable_last2_one - syllable_last2_single[index] * syllable_last2_noise)
         else:
             ones = torch.LongTensor(single.data.new(batch_size, bucket_length, lemma_length).fill_(1))
             noise = torch.LongTensor(masks_e.data.new(batch_size, bucket_length, lemma_length).bernoulli_(unk_replace).long())
@@ -411,10 +430,11 @@ def get_batch_stacked_variable(data, batch_size, unk_replace=0., use_gpu=False,e
     if use_gpu:
         words = words.cuda()
         if end_to_end:
-            pre_words = pre_words.cuda()
-            post_words = post_words.cuda()
-            post_bi_words = post_bi_words.cuda()
-            pre_bi_words = pre_bi_words.cuda()
+            syllable_begins = syllable_begins.cuda()
+            syllable_begin2s = syllable_begin2s.cuda()
+
+            syllable_lasts = syllable_lasts.cuda()
+            syllable_last2s = syllable_last2s.cuda()
         chars = chars.cuda()
         pos = pos.cuda()
         heads = heads.cuda()
@@ -429,7 +449,7 @@ def get_batch_stacked_variable(data, batch_size, unk_replace=0., use_gpu=False,e
         masks_d = masks_d.cuda()
         lengths_d = lengths_d.cuda()
     if end_to_end:
-        return ((words,pre_words,post_words,post_bi_words,pre_bi_words), chars[index], pos[index], heads[index], types[index], masks_e[index], lengths_e[index]), \
+        return ((words,syllable_begins,syllable_begin2s,syllable_lasts,syllable_last2s), chars[index], pos[index], heads[index], types[index], masks_e[index], lengths_e[index]), \
            (stacked_heads[index], children[index], siblings[index], stacked_types[index], skip_connect[index], masks_d[index], lengths_d[index])
     else:
         return (words, chars[index], pos[index], heads[index], types[index], masks_e[index],
@@ -452,7 +472,10 @@ def iterate_batch_stacked_variable(data, batch_size, unk_replace=0., shuffle=Fal
             continue
         data_encoder, data_decoder, data_sentences = data_variable[bucket_id]
         if end_to_end:
-            words,pre_words,post_words,post_bi_words,pre_bi_words, chars, pos, heads, types, masks_e, single,pre_single,post_single,post_bi_single,pre_bi_single, lengths_e = data_encoder
+            words,syllable_begin,syllable_begin2,syllable_last,syllable_last2,\
+                chars, pos, heads, types, masks_e, \
+                single,syllable_begin_single,syllable_begin2_single,syllable_last_single,syllable_last2_single, \
+                lengths_e = data_encoder
         else:
             words, chars, pos, heads, types, masks_e, single, lengths_e = data_encoder
         stacked_heads, children, siblings, stacked_types, skip_connect, masks_d, lengths_d = data_decoder
@@ -462,21 +485,24 @@ def iterate_batch_stacked_variable(data, batch_size, unk_replace=0., shuffle=Fal
             if end_to_end:
                 ones = Variable(single.data.new(bucket_size, bucket_length).fill_(1))
                 noise = Variable(masks_e.data.new(bucket_size, bucket_length).bernoulli_(unk_replace).long())
-                pre_ones = Variable(pre_single.data.new(bucket_size, bucket_length).fill_(1))
-                pre_noise = Variable(masks_e.data.new(bucket_size, bucket_length).bernoulli_(unk_replace).long())
-                post_ones = Variable(post_single.data.new(bucket_size, bucket_length).fill_(1))
-                post_noise = Variable(masks_e.data.new(bucket_size, bucket_length).bernoulli_(unk_replace).long())
-                post_bi_ones = Variable(post_bi_single.data.new(bucket_size, bucket_length).fill_(1))
-                post_bi_noise = Variable(masks_e.data.new(bucket_size, bucket_length).bernoulli_(unk_replace).long())
+                syllable_begin_ones = Variable(syllable_begin_single.data.new(bucket_size, bucket_length).fill_(1))
+                syllable_begin_noise = Variable(masks_e.data.new(bucket_size, bucket_length).bernoulli_(unk_replace).long())
 
-                pre_bi_ones = Variable(pre_bi_single.data.new(bucket_size, bucket_length).fill_(1))
-                pre_bi_noise = Variable(masks_e.data.new(bucket_size, bucket_length).bernoulli_(unk_replace).long())
+                syllable_begin2_ones = Variable(syllable_begin2_single.data.new(bucket_size, bucket_length).fill_(1))
+                syllable_begin2_noise = Variable(masks_e.data.new(bucket_size, bucket_length).bernoulli_(unk_replace).long())
+
+                syllable_last_ones = Variable(syllable_last_single.data.new(bucket_size, bucket_length).fill_(1))
+                syllable_last_noise = Variable(masks_e.data.new(bucket_size, bucket_length).bernoulli_(unk_replace).long())
+
+                syllable_last2_ones = Variable(syllable_last2_single.data.new(bucket_size, bucket_length).fill_(1))
+                syllable_last2_noise = Variable(masks_e.data.new(bucket_size, bucket_length).bernoulli_(unk_replace).long())
 
                 words = words * (ones - single * noise)
-                pre_words = pre_words * (pre_ones - pre_single * pre_noise)
-                post_words = post_words * (post_ones - post_single * post_noise)
-                post_bi_words = post_bi_words * (post_bi_ones - post_bi_single * post_bi_noise)
-                pre_bi_words = pre_bi_words * (pre_bi_ones - pre_bi_single * pre_bi_noise)
+
+                syllable_begin = syllable_begin * (syllable_begin_ones - syllable_begin_single * syllable_begin_noise)
+                syllable_last = syllable_last * (syllable_last_ones - syllable_last_single * syllable_last_noise)
+                syllable_last2 = syllable_last2 * (syllable_last2_ones - syllable_last2_single * syllable_last2_noise)
+                syllable_begin2 = syllable_begin2 * (syllable_begin2_ones - syllable_begin2_single * syllable_begin2_noise)
 
             else:
                 ones = Variable(single.data.new(bucket_size, bucket_length, lemma_length).fill_(1))
@@ -495,7 +521,7 @@ def iterate_batch_stacked_variable(data, batch_size, unk_replace=0., shuffle=Fal
                 excerpt = slice(start_idx, start_idx + batch_size)
             if use_gpu:
                 if end_to_end:
-                    yield ((words[excerpt].cuda(),pre_words[excerpt].cuda(),post_words[excerpt].cuda(),post_bi_words[excerpt].cuda(),pre_bi_words[excerpt].cuda()), chars[excerpt].cuda(), pos[excerpt].cuda(), heads[excerpt].cuda(), types[excerpt].cuda(), masks_e[excerpt].cuda(), lengths_e[excerpt].cuda()), \
+                    yield ((words[excerpt].cuda(),syllable_begin[excerpt].cuda(),syllable_begin2[excerpt].cuda(),syllable_last[excerpt].cuda(),syllable_last2[excerpt].cuda()), chars[excerpt].cuda(), pos[excerpt].cuda(), heads[excerpt].cuda(), types[excerpt].cuda(), masks_e[excerpt].cuda(), lengths_e[excerpt].cuda()), \
                       (stacked_heads[excerpt].cuda(), children[excerpt].cuda(), siblings[excerpt].cuda(), stacked_types[excerpt].cuda(), skip_connect[excerpt].cuda(), masks_d[excerpt].cuda(), lengths_d[excerpt].cuda()), \
                       data_sentences[excerpt]
 
@@ -505,7 +531,7 @@ def iterate_batch_stacked_variable(data, batch_size, unk_replace=0., shuffle=Fal
                       data_sentences[excerpt]
             else:
                 if end_to_end:
-                    yield ((words[excerpt],pre_words[excerpt],post_words[excerpt],post_bi_words[excerpt]), chars[excerpt], pos[excerpt], heads[excerpt], types[excerpt], masks_e[excerpt], lengths_e[excerpt]), \
+                    yield ((words[excerpt],syllable_begin[excerpt],syllable_begin2[excerpt],syllable_last[excerpt],syllable_last2[excerpt]), chars[excerpt], pos[excerpt], heads[excerpt], types[excerpt], masks_e[excerpt], lengths_e[excerpt]), \
                       (stacked_heads[excerpt], children[excerpt], siblings[excerpt], stacked_types[excerpt], skip_connect[excerpt], masks_d[excerpt], lengths_d[excerpt]), \
                       data_sentences[excerpt]
 

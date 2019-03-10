@@ -119,7 +119,7 @@ def main():
     network = StackPtrNet(word_dim, num_words, char_dim, num_chars, pos_dim, num_pos, char_num_filters, char_window, eojul_num_filters, eojul_window,
                           mode, input_size_decoder, hidden_size, encoder_layers, decoder_layers,
                           num_types, arc_space, type_space,
-                          embedd_word=word_table, embedd_char=char_table, embedd_pos=pos_table, p_in=p_in, p_out=p_out, p_rnn=p_rnn,
+                          embedd_word=word_table, embedd_syllable=char_table, embedd_pos=pos_table, p_in=p_in, p_out=p_out, p_rnn=p_rnn,
                           biaffine=True, pos=use_pos, char=use_char, eojul=use_eojul, prior_order=prior_order,
                           skipConnect=skipConnect, grandPar=grandPar, sibling=sibling)
 

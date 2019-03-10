@@ -46,13 +46,17 @@ def main():
     args_parser.add_argument('--pos', action='store_true', help='use part-of-speech embedding.')
     args_parser.add_argument('--char', action='store_true', help='use character embedding and CNN.')
     args_parser.add_argument('--eojul', action='store_true', help='use eojul embedding and CNN.')
+
     args_parser.add_argument('--word_dim', type=int, default=300, help='Dimension of Word embeddings')
-    args_parser.add_argument('--pre_word_dim', type=int, default=300, help='Dimension of Word embeddings')
-    args_parser.add_argument('--post_word_dim', type=int, default=300, help='Dimension of Word embeddings')
-    args_parser.add_argument('--post_bi_word_dim', type=int, default=300, help='Dimension of Word embeddings')
-    args_parser.add_argument('--pre_bi_word_dim', type=int, default=300, help='Dimension of Word embeddings')
     args_parser.add_argument('--pos_dim', type=int, default=50, help='Dimension of POS embeddings')
     args_parser.add_argument('--char_dim', type=int, default=100, help='Dimension of Character embeddings')
+
+    args_parser.add_argument('--syllable_begin', action='store_true', help="use first syllable")
+    args_parser.add_argument('--syllable_last', action='store_true', help='use last syllable')
+    args_parser.add_argument('--syllable_begin2', action='store_true', help='use first-second syllable')
+    args_parser.add_argument('--syllable_last2', action='store_true', help='use first-second syllable')
+    args_parser.add_argument('--syllable_position_embedding_dim', type=int, default=300, help='Dimension of syllable position embeddings')
+
     args_parser.add_argument('--opt', choices=['adam', 'sgd', 'adamax'], help='optimization algorithm', default='adam')
     args_parser.add_argument('--learning_rate', type=float, default=1e-3, help='Learning rate')
     args_parser.add_argument('--decay_rate', type=float, default=0.75 , help='Decay rate of learning rate')
@@ -146,6 +150,11 @@ def main():
     pos_embedding = args.pos_embedding
     pos_path = args.pos_path
 
+    use_syllable_begin = args.syllable_begin
+    use_syllable_begin2 = args.syllable_begin2
+    use_syllable_last = args.syllable_last
+    use_syllable_last2 = args.syllable_last2
+
     n_head = args.n_head
 
     use_pos = args.pos
@@ -174,28 +183,41 @@ def main():
         else:
             pos_dict = None
             pos_dim = args.pos_dim
-    if end_to_end:
-        pre_word_dict = {}
-        pre_word_dim = args.pre_word_dim
-        post_word_dict = {}
-        post_word_dim = args.post_word_dim
-        post_bi_word_dict = {}
-        post_bi_word_dim = args.post_bi_word_dim
-        pre_bi_word_dict = {}
-        pre_bi_word_dim = args.pre_bi_word_dim
+
+    if use_syllable_begin:
+        syllable_begin_dict = {}
+    if use_syllable_begin2:
+        syllable_begin2_dict = {}
+    if use_syllable_last:
+        syllable_last_dict = {}
+    if use_syllable_last2:
+        syllable_last2_dict = {}
+
+    syllable_position_embedding_dim = args.syllable_position_embedding_dim
+
     use_eojul = args.eojul
 
     logger.info("Creating Alphabets")
     alphabet_path = os.path.join(model_path, 'alphabets/')
     model_name = os.path.join(model_path, model_name)
     word_alphabet, char_alphabet, pos_alphabet, type_alphabet = conllx_stacked_data.create_alphabets(alphabet_path, train_path, data_paths=[dev_path, test_path],
-                                                                                                     max_vocabulary_size=50000, embedd_dict=word_dict,kkma=kkma,end_to_end=end_to_end)
+                                                                                                     max_vocabulary_size=50000, embedd_dict=word_dict,kkma=kkma,
+                                                                                                     end_to_end=end_to_end,
+                                                                                                     syllable_postions=(use_syllable_begin,use_syllable_begin2,use_syllable_last,use_syllable_last2))
     if end_to_end:
         num_words = word_alphabet[0].size()
-        num_pre_words = word_alphabet[1].size()
-        num_post_words = word_alphabet[2].size()
-        num_post_bi_words = word_alphabet[3].size()
-        num_pre_bi_words = word_alphabet[4].size()
+
+        if use_syllable_begin:
+            num_syllable_begin_words = word_alphabet[1][0].size()
+
+        if use_syllable_begin2:
+            num_syllable_begin2_words = word_alphabet[1][1].size()
+
+        if use_syllable_last:
+            num_syllable_last_words = word_alphabet[1][2].size()
+
+        if use_syllable_last2:
+            num_syllable_last2_words = word_alphabet[1][3].size()
 
     else:
         num_words = word_alphabet.size()
@@ -212,13 +234,27 @@ def main():
     logger.info("Reading Data")
     # use_gpu = use_gpu
 
-    data_train = conllx_stacked_data.read_stacked_data_to_variable(train_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet, use_gpu=use_gpu, prior_order=prior_order,kkma=kkma,end_to_end=end_to_end)
+    data_train = conllx_stacked_data.read_stacked_data_to_variable(train_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet,
+                                                                   use_gpu=use_gpu, prior_order=prior_order,kkma=kkma,end_to_end=end_to_end,
+                                                                   syllable_positions=(use_syllable_begin,use_syllable_begin2,
+                                                                                      use_syllable_last,use_syllable_last2))
     num_data = sum(data_train[1])
 
-    data_dev = conllx_stacked_data.read_stacked_data_to_variable(dev_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet, use_gpu=use_gpu, prior_order=prior_order,kkma=kkma,end_to_end=end_to_end)
-    data_test = conllx_stacked_data.read_stacked_data_to_variable(test_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet, use_gpu=use_gpu, prior_order=prior_order,kkma=kkma,end_to_end=end_to_end)
+    data_dev = conllx_stacked_data.read_stacked_data_to_variable(dev_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet,
+                                                                 use_gpu=use_gpu, prior_order=prior_order,kkma=kkma,end_to_end=end_to_end,
+                                                                 syllable_positions=(
+                                                                     use_syllable_begin, use_syllable_begin2,
+                                                                     use_syllable_last, use_syllable_last2))
+
+    data_test = conllx_stacked_data.read_stacked_data_to_variable(test_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet,
+                                                                  use_gpu=use_gpu, prior_order=prior_order,kkma=kkma,end_to_end=end_to_end,
+                                                                  syllable_positions=(
+                                                                     use_syllable_begin, use_syllable_begin2,
+                                                                     use_syllable_last, use_syllable_last2))
+
     if end_to_end:
-        word_alphabet,pre_alphabet,post_alphabet,post_bi_alphabet,pre_bi_alphabet = word_alphabet
+        word_alphabet,(syllable_begin_alphabet, syllable_begin2_alphabet,\
+        syllable_last_alphabet, syllable_last2_alphabet) = word_alphabet
 
     punct_set = None
     if punctuation is not None:
@@ -242,69 +278,77 @@ def main():
         print('word OOV: %d' % oov)
         return torch.from_numpy(table)
 
-    def construct_pre_word_embedding_table():
-        scale = np.sqrt(3.0 / pre_word_dim)
-        table = np.empty([pre_alphabet.size(), pre_word_dim], dtype=np.float32)
-        table[conllx_stacked_data.UNK_ID, :] = np.zeros([1, pre_word_dim]).astype(np.float32) if freeze else np.random.uniform(-scale, scale, [1, pre_word_dim]).astype(np.float32)
+    def construct_syllable_begin_word_embedding_table():
+        scale = np.sqrt(3.0 / syllable_position_embedding_dim)
+        table = np.empty([syllable_begin_alphabet.size(), syllable_position_embedding_dim], dtype=np.float32)
+        table[conllx_stacked_data.UNK_ID, :] = np.zeros([1, syllable_position_embedding_dim]).astype(np.float32) \
+            if freeze else np.random.uniform(-scale, scale, [1, syllable_position_embedding_dim]).astype(np.float32)
         oov = 0
-        for word, index in pre_alphabet.items():
-            if word in pre_word_dict:
-                embedding = pre_word_dict[word]
-            elif word.lower() in pre_word_dict:
-                embedding = pre_word_dict[word.lower()]
+        for word, index in syllable_begin_alphabet.items():
+            if word in syllable_begin_dict:
+                embedding = syllable_begin_dict[word]
+            elif word.lower() in syllable_begin_dict:
+                embedding = syllable_begin_dict[word.lower()]
             else:
-                embedding = np.zeros([1, pre_word_dim]).astype(np.float32) if freeze else np.random.uniform(-scale, scale, [1, pre_word_dim]).astype(np.float32)
+                embedding = np.zeros([1, syllable_position_embedding_dim]).astype(np.float32) \
+                    if freeze else np.random.uniform(-scale, scale, [1, syllable_position_embedding_dim]).astype(np.float32)
                 oov += 1
             table[index, :] = embedding
         print('Prefix word OOV: %d' % oov)
         return torch.from_numpy(table)
 
-    def construct_pre_bi_word_embedding_table():
-        scale = np.sqrt(3.0 / pre_bi_word_dim)
-        table = np.empty([pre_bi_alphabet.size(), pre_bi_word_dim], dtype=np.float32)
-        table[conllx_stacked_data.UNK_ID, :] = np.zeros([1, pre_bi_word_dim]).astype(np.float32) if freeze else np.random.uniform(-scale, scale, [1, pre_bi_word_dim]).astype(np.float32)
+    def construct_syllable_begin2_word_embedding_table():
+        scale = np.sqrt(3.0 / syllable_position_embedding_dim)
+        table = np.empty([syllable_begin2_alphabet.size(), syllable_position_embedding_dim], dtype=np.float32)
+        table[conllx_stacked_data.UNK_ID, :] = np.zeros([1, syllable_position_embedding_dim]).astype(np.float32) \
+            if freeze else np.random.uniform(-scale, scale, [1, syllable_position_embedding_dim]).astype(np.float32)
         oov = 0
-        for word, index in pre_bi_alphabet.items():
-            if word in pre_bi_word_dict:
-                embedding = pre_bi_word_dict[word]
-            elif word.lower() in pre_bi_word_dict:
-                embedding = pre_bi_word_dict[word.lower()]
+        for word, index in syllable_begin2_alphabet.items():
+            if word in syllable_begin2_dict:
+                embedding = syllable_begin2_dict[word]
+            elif word.lower() in syllable_begin2_dict:
+                embedding = syllable_begin2_dict[word.lower()]
             else:
-                embedding = np.zeros([1, pre_bi_word_dim]).astype(np.float32) if freeze else np.random.uniform(-scale, scale, [1, pre_bi_word_dim]).astype(np.float32)
+                embedding = np.zeros([1, syllable_position_embedding_dim]).astype(np.float32) \
+                    if freeze else np.random.uniform(-scale, scale, [1, syllable_position_embedding_dim]).astype(np.float32)
                 oov += 1
             table[index, :] = embedding
         print('Prefix BI word OOV: %d' % oov)
         return torch.from_numpy(table)
 
-    def construct_post_word_embedding_table():
-        scale = np.sqrt(3.0 / post_word_dim)
-        table = np.empty([post_alphabet.size(), post_word_dim], dtype=np.float32)
-        table[conllx_stacked_data.UNK_ID, :] = np.zeros([1, post_word_dim]).astype(np.float32) if freeze else np.random.uniform(-scale, scale, [1, post_word_dim]).astype(np.float32)
+    def construct_syllable_last_word_embedding_table():
+        scale = np.sqrt(3.0 / syllable_position_embedding_dim)
+        table = np.empty([syllable_last_alphabet.size(), syllable_position_embedding_dim], dtype=np.float32)
+        table[conllx_stacked_data.UNK_ID, :] = np.zeros([1, syllable_position_embedding_dim]).astype(np.float32) \
+            if freeze else np.random.uniform(-scale, scale, [1, syllable_position_embedding_dim]).astype(np.float32)
         oov = 0
-        for word, index in post_alphabet.items():
-            if word in post_word_dict:
-                embedding = post_word_dict[word]
-            elif word.lower() in post_word_dict:
-                embedding = post_word_dict[word.lower()]
+        for word, index in syllable_last_alphabet.items():
+            if word in syllable_last_dict:
+                embedding = syllable_last_dict[word]
+            elif word.lower() in syllable_last_dict:
+                embedding = syllable_last_dict[word.lower()]
             else:
-                embedding = np.zeros([1, post_word_dim]).astype(np.float32) if freeze else np.random.uniform(-scale, scale, [1, post_word_dim]).astype(np.float32)
+                embedding = np.zeros([1, syllable_position_embedding_dim]).astype(np.float32) \
+                    if freeze else np.random.uniform(-scale, scale, [1, syllable_position_embedding_dim]).astype(np.float32)
                 oov += 1
             table[index, :] = embedding
         print('post word OOV: %d' % oov)
         return torch.from_numpy(table)
 
-    def construct_post_bi_word_embedding_table():
-        scale = np.sqrt(3.0 / post_bi_word_dim)
-        table = np.empty([post_bi_alphabet.size(), post_bi_word_dim], dtype=np.float32)
-        table[conllx_stacked_data.UNK_ID, :] = np.zeros([1, post_bi_word_dim]).astype(np.float32) if freeze else np.random.uniform(-scale, scale, [1, post_bi_word_dim]).astype(np.float32)
+    def construct_syllable_last2_word_embedding_table():
+        scale = np.sqrt(3.0 / syllable_position_embedding_dim)
+        table = np.empty([syllable_last2_alphabet.size(), syllable_position_embedding_dim], dtype=np.float32)
+        table[conllx_stacked_data.UNK_ID, :] = np.zeros([1, syllable_position_embedding_dim]).astype(np.float32) \
+            if freeze else np.random.uniform(-scale, scale, [1, syllable_position_embedding_dim]).astype(np.float32)
         oov = 0
-        for word, index in post_bi_alphabet.items():
-            if word in post_bi_word_dict:
-                embedding = post_bi_word_dict[word]
-            elif word.lower() in post_bi_word_dict:
-                embedding = post_bi_word_dict[word.lower()]
+        for word, index in syllable_last2_alphabet.items():
+            if word in syllable_last2_dict:
+                embedding = syllable_last2_dict[word]
+            elif word.lower() in syllable_last2_dict:
+                embedding = syllable_last2_dict[word.lower()]
             else:
-                embedding = np.zeros([1, post_bi_word_dim]).astype(np.float32) if freeze else np.random.uniform(-scale, scale, [1, post_bi_word_dim]).astype(np.float32)
+                embedding = np.zeros([1, syllable_position_embedding_dim]).astype(np.float32) \
+                    if freeze else np.random.uniform(-scale, scale, [1, syllable_position_embedding_dim]).astype(np.float32)
                 oov += 1
             table[index, :] = embedding
         print('post bi word OOV: %d' % oov)
@@ -351,21 +395,42 @@ def main():
     pos_table = construct_pos_embedding_table()
 
     if end_to_end:
-        pre_word_table = construct_pre_word_embedding_table()
-        post_word_table = construct_post_word_embedding_table()
-        post_bi_word_table = construct_post_bi_word_embedding_table()
-        pre_bi_word_table= construct_pre_bi_word_embedding_table()
 
-        word_dim = (word_dim,pre_word_dim,post_word_dim,post_bi_word_dim,pre_bi_word_dim)
-        word_table = (word_table,pre_word_table,post_word_table,post_bi_word_table,pre_bi_word_table)
-        num_words = (num_words,num_pre_words,num_post_words,num_post_bi_words,num_pre_bi_words)
+        if use_syllable_begin:
+            syllable_begin_word_table = construct_syllable_begin_word_embedding_table()
+        else:
+            syllable_begin_word_table = None
 
-    network = StackPtrNet(word_dim, num_words, char_dim, num_chars, pos_dim, num_pos, char_num_filters, char_window, eojul_num_filters, eojul_window,
+        if use_syllable_begin2:
+            syllable_begin2_word_table = construct_syllable_begin2_word_embedding_table()
+        else:
+            syllable_begin2_word_table = None
+
+        if use_syllable_last:
+            syllable_last_word_table = construct_syllable_last_word_embedding_table()
+        else:
+            syllable_last_word_table = None
+
+        if use_syllable_last2:
+            syllable_last2_word_table = construct_syllable_last2_word_embedding_table()
+        else:
+            syllable_last2_word_table = None
+
+        word_dim = (word_dim, syllable_position_embedding_dim)
+        word_table = (word_table, syllable_begin_word_table, syllable_last_word_table,
+                      syllable_last2_word_table, syllable_begin2_word_table)
+        num_words = (num_words, num_syllable_begin_words, num_syllable_begin2_words
+                     ,num_syllable_last_words, num_syllable_last2_words)
+
+    network = StackPtrNet(word_dim, num_words, char_dim, num_chars, pos_dim, num_pos, char_num_filters,
+                          char_window, eojul_num_filters, eojul_window,
                           mode, input_size_decoder, hidden_size, encoder_layers, decoder_layers,
                           num_types, arc_space, type_space,
-                          embedd_word=word_table, embedd_char=char_table, embedd_pos=pos_table, p_in=p_in, p_out=p_out, p_rnn=p_rnn,
+                          embedd_word=word_table, embedd_syllable=char_table, embedd_pos=pos_table, p_in=p_in, p_out=p_out, p_rnn=p_rnn,
                           biaffine=True, pos=use_pos, char=use_char, eojul=use_eojul, prior_order=prior_order,
-                          skipConnect=skipConnect, grandPar=grandPar, sibling=sibling, n_head=n_head,end_to_end=end_to_end)
+                          skipConnect=skipConnect, grandPar=grandPar, sibling=sibling, n_head=n_head, end_to_end=end_to_end,
+                          syllable_positions=(use_syllable_begin,use_syllable_begin2,use_syllable_last,use_syllable_last2),
+                          syllable_vector=use_char)
 
     def save_args():
         arg_path = model_name + '.arg.json'

@@ -42,7 +42,7 @@ from .reader import CoNLLXReader
 
 
 def create_alphabets(alphabet_directory, train_path, data_paths=None, max_vocabulary_size=1000000, embedd_dict=None,
-                     min_occurence=1, normalize_digits=True,kkma=False,end_to_end=False):
+                     min_occurence=1, normalize_digits=True,kkma=False,end_to_end=False,syllable_postions=None):
     def expand_vocab():
         vocab_set = set(vocab_list)
 
@@ -113,11 +113,19 @@ def create_alphabets(alphabet_directory, train_path, data_paths=None, max_vocabu
     type_alphabet = Alphabet('type')
 
     if end_to_end:
-        pre_alphabet = Alphabet("pre_word", defualt_value=True, singleton=True)
-        pre_bi_alphabet = Alphabet("pre_bi_word", defualt_value=True, singleton=True)
 
-        post_alphabet = Alphabet("post_word",defualt_value=True,singleton=True)
-        post_bi_alphabet = Alphabet("post_bi_word",defualt_value=True,singleton=True)
+        if syllable_postions[0]:
+            syllable_begin_alphabet = Alphabet("pre_word", defualt_value=True, singleton=True)
+
+        if syllable_postions[1]:
+            syllable_begin2_alphabet = Alphabet("pre_bi_word", defualt_value=True, singleton=True)
+
+        if syllable_postions[2]:
+            syllable_last_alphabet = Alphabet("post_word",defualt_value=True,singleton=True)
+
+        if syllable_postions[3]:
+            syllable_last2_alphabet = Alphabet("post_bi_word",defualt_value=True,singleton=True)
+
     if kkma:
         tagger = Kkma()
 
@@ -137,11 +145,12 @@ def create_alphabets(alphabet_directory, train_path, data_paths=None, max_vocabu
         type_alphabet.add(END_TYPE)
 
         vocab = dict()
-        pre_vocab = dict()
-        pre_bi_vocab = dict()
 
-        post_vocab = dict()
-        post_bi_vocab = dict()
+        syllable_begin_vocab = dict()
+        syllable_begin2_vocab = dict()
+
+        syllable_last_vocab = dict()
+        syllable_last2_vocab = dict()
 
         with open(train_path, 'r',encoding='utf-8') as file:
             for line in file:
@@ -153,40 +162,44 @@ def create_alphabets(alphabet_directory, train_path, data_paths=None, max_vocabu
                 if end_to_end:
                     word = tokens[1]
 
-                    word =  utils.DIGIT_RE.sub("0",word) if normalize_digits else word
+                    word = utils.DIGIT_RE.sub("0",word) if normalize_digits else word
 
-                    pre_word = utils.DIGIT_RE.sub("0",word[0]) if normalize_digits else word[0]
-                    pre_bi_word = utils.DIGIT_RE.sub("0",word[:2]) if normalize_digits else word[:2]
-                    post_word = utils.DIGIT_RE.sub("0",word[-1]) if normalize_digits else word[-1]
-                    post_bi_word = utils.DIGIT_RE.sub("0",word[-2:]) if normalize_digits else word[-2:]
+                    syllable_begin_word = utils.DIGIT_RE.sub("0",word[0]) if normalize_digits else word[0]
+                    syllable_begin2_word = utils.DIGIT_RE.sub("0",word[:2]) if normalize_digits else word[:2]
+                    syllable_last_word = utils.DIGIT_RE.sub("0",word[-1]) if normalize_digits else word[-1]
+                    syllable_last2_word = utils.DIGIT_RE.sub("0",word[-2:]) if normalize_digits else word[-2:]
 
-                    type = tokens[7]
-                    type_alphabet.add(type)
+                    label = tokens[7]
+                    type_alphabet.add(label)
 
                     if word in vocab:
-                        vocab[word]+=1
+                        vocab[word] += 1
                     else:
-                        vocab[word]=1
+                        vocab[word] = 1
 
-                    if pre_word in pre_vocab:
-                        pre_vocab[pre_word]+=1
-                    else:
-                        pre_vocab[pre_word]=1
+                    if syllable_postions[0]:
+                        if syllable_begin_word in syllable_begin_vocab:
+                            syllable_begin_vocab[syllable_begin_word] += 1
+                        else:
+                            syllable_begin_vocab[syllable_begin_word] = 1
 
-                    if pre_bi_word in pre_bi_vocab:
-                        pre_bi_vocab[pre_bi_word]+=1
-                    else:
-                        pre_bi_vocab[pre_bi_word]=1
+                    if syllable_postions[1]:
+                        if syllable_begin2_word in syllable_begin2_vocab:
+                            syllable_begin2_vocab[syllable_begin2_word] += 1
+                        else:
+                            syllable_begin2_vocab[syllable_begin2_word] = 1
 
-                    if post_word in post_vocab:
-                        post_vocab[post_word] +=1
-                    else:
-                        post_vocab[post_word]=1
+                    if syllable_postions[2]:
+                        if syllable_last_word in syllable_last_vocab:
+                            syllable_last_vocab[syllable_last_word] += 1
+                        else:
+                            syllable_last_vocab[syllable_last_word] = 1
 
-                    if post_bi_word in post_bi_vocab:
-                        post_bi_vocab[post_bi_word] +=1
-                    else:
-                        post_bi_vocab[post_bi_word]=1
+                    if syllable_postions[3]:
+                        if syllable_last2_word in syllable_last2_vocab:
+                            syllable_last2_vocab[syllable_last2_word] += 1
+                        else:
+                            syllable_last2_vocab[syllable_last2_word]= 1
 
                     for char in tokens[1]:
                         char_alphabet.add(char)
@@ -219,10 +232,10 @@ def create_alphabets(alphabet_directory, train_path, data_paths=None, max_vocabu
                         words = utils.DIGIT_RE.sub("0", tokens[2]) if normalize_digits else tokens[2]
                         pos = tokens[4]
 
-                    type = tokens[7]
+                    label = tokens[7]
 
                     pos_alphabet.add(pos)
-                    type_alphabet.add(type)
+                    type_alphabet.add(label)
 
                     for word in words.split(" "):
                         if word in vocab:
@@ -234,10 +247,18 @@ def create_alphabets(alphabet_directory, train_path, data_paths=None, max_vocabu
         singletons = set([word for word, count in vocab.items() if count <= min_occurence])
 
         if end_to_end:
-            pre_singletons = set([pre_word for pre_word,count in pre_vocab.items() if count<=min_occurence])
-            pre_bi_singletons = set([pre_bi_word for pre_bi_word,count in pre_bi_vocab.items() if count<=min_occurence])
-            post_singletons = set([post_word for post_word,count in post_vocab.items() if count <= min_occurence])
-            post_bi_singletons = set([post_bi_word for post_bi_word,count in post_bi_vocab.items() if count <= min_occurence])
+            if syllable_postions[0]:
+                syllable_begin_singletons = set([syllable_begin_word for syllable_begin_word, count
+                                                 in syllable_begin_vocab.items() if count <= min_occurence])
+            if syllable_postions[1]:
+                syllable_begin2_singletons = set([syllable_begin2_word for syllable_begin2_word, count
+                                                  in syllable_begin2_vocab.items() if count <= min_occurence])
+            if syllable_postions[2]:
+                syllable_last_singletons = set([syllable_last_word for syllable_last_word, count
+                                                in syllable_last_vocab.items() if count <= min_occurence])
+            if syllable_postions[3]:
+                syllable_last2_singletons = set([syllable_last2_word for syllable_last2_word, count
+                                                 in syllable_last2_vocab.items() if count <= min_occurence])
 
         # if a singleton is in pretrained embedding dict, set the count to min_occur + c
         if embedd_dict is not None:
@@ -252,40 +273,54 @@ def create_alphabets(alphabet_directory, train_path, data_paths=None, max_vocabu
         logger.info("Total Vocabulary Size (w.o rare words): %d" % len(vocab_list))
 
         if end_to_end:
-            pre_vocab_list = _START_VOCAB + sorted(pre_vocab,key=pre_vocab.get,reverse=True)
-            logger.info("Total Prefix Vocabulary Size: %d" % len(pre_vocab_list))
-            logger.info("Total Prefix SingleTon Size: %d"%len(pre_singletons))
-            pre_vocab_list = [pre_word for pre_word in pre_vocab_list if pre_word in _START_VOCAB or pre_vocab[pre_word] > min_occurence]
-            logger.info("Total Prefix Vocabulary Size (w.o rare words): %d"%len(pre_vocab_list))
+            if syllable_postions[0]:
+                syllable_begin_vocab_list = _START_VOCAB + sorted(syllable_begin_vocab, key=syllable_begin_vocab.get, reverse=True)
+                logger.info("Total Syllable Begin Vocabulary Size: %d" % len(syllable_begin_vocab_list))
+                logger.info("Total Syllable Begin SingleTon Size: %d" % len(syllable_begin_singletons))
+                syllable_begin_vocab_list = [syllable_begin_word for syllable_begin_word
+                                             in syllable_begin_vocab_list if syllable_begin_word
+                                             in _START_VOCAB or syllable_begin_vocab[syllable_begin_word] > min_occurence]
+                logger.info("Total Syllable Begin Vocabulary Size (w.o rare words): %d" % len(syllable_begin_vocab_list))
+                if len(syllable_begin_vocab_list) > max_vocabulary_size:
+                    syllable_begin_vocab_list = syllable_begin_vocab_list[:max_vocabulary_size]
 
-            pre_bi_vocab_list = _START_VOCAB + sorted(pre_bi_vocab,key=pre_bi_vocab.get,reverse=True)
-            logger.info("Total Prefix Vocabulary Size: %d" % len(pre_bi_vocab_list))
-            logger.info("Total Prefix SingleTon Size: %d"%len(pre_bi_singletons))
-            pre_bi_vocab_list = [pre_bi_word for pre_bi_word in pre_bi_vocab_list if pre_bi_word in _START_VOCAB or pre_bi_vocab[pre_bi_word] > min_occurence]
-            logger.info("Total Prefix Vocabulary Size (w.o rare words): %d"%len(pre_bi_vocab_list))
+            if syllable_postions[1]:
+                syllable_begin2_vocab_list = _START_VOCAB + sorted(syllable_begin2_vocab,key=syllable_begin2_vocab.get, reverse=True)
+                logger.info("Total Syllable Begin 2 Vocabulary Size: %d" % len(syllable_begin2_vocab_list))
+                logger.info("Total Syllable Begin 2 SingleTon Size: %d" % len(syllable_begin2_singletons))
+                syllable_begin2_vocab_list = [syllable_begin2_word for syllable_begin2_word
+                                              in syllable_begin2_vocab_list if syllable_begin2_word
+                                              in _START_VOCAB or syllable_begin2_vocab[syllable_begin2_word] > min_occurence]
+                logger.info("Total Syllable Begin 2 Vocabulary Size (w.o rare words): %d" % len(syllable_begin2_vocab_list))
 
-            post_vocab_list = _START_VOCAB + sorted(post_vocab,key=post_vocab.get,reverse=True)
-            logger.info("Total Postfix Vocabulary Size: %d" % len(post_vocab_list))
-            logger.info("Total Postfix SingleTon Size: %d"%len(post_singletons))
-            post_vocab_list = [post_word for post_word in post_vocab_list if post_word in _START_VOCAB or post_vocab[post_word] > min_occurence]
-            logger.info("Total Postfix Vocabulary Size (w.o rare words): %d"%len(post_vocab_list))
+                if len(syllable_begin2_vocab_list) > max_vocabulary_size:
+                    syllable_begin2_vocab_list = syllable_begin2_vocab_list[:max_vocabulary_size]
 
-            post_bi_vocab_list = _START_VOCAB + sorted(post_bi_vocab,key=post_bi_vocab.get,reverse=True)
-            logger.info("Total Postfix BI Vocabulary Size: %d" % len(post_bi_vocab_list))
-            logger.info("Total Postfix BI SingleTon Size: %d"%len(post_bi_singletons))
-            post_bi_vocab_list = [post_bi_word for post_bi_word in post_bi_vocab_list if post_bi_word in _START_VOCAB or post_bi_vocab[post_bi_word] > min_occurence]
-            logger.info("Total Postfix BI Vocabulary Size (w.o rare words): %d"%len(post_bi_vocab_list))
 
-            if len(pre_vocab_list) > max_vocabulary_size:
-                pre_vocab_list = pre_vocab_list[:max_vocabulary_size]
+            if syllable_postions[2]:
+                syllable_last_vocab_list = _START_VOCAB + sorted(syllable_last_vocab,key=syllable_last_vocab.get, reverse=True)
+                logger.info("Total Syllable Last Vocabulary Size: %d" % len(syllable_last_vocab_list))
+                logger.info("Total Syllable Last SingleTon Size: %d" % len(syllable_last_singletons))
+                syllable_last_vocab_list = [syllable_last_word for syllable_last_word
+                                            in syllable_last_vocab_list if syllable_last_word
+                                            in _START_VOCAB or syllable_last_vocab[syllable_last_word] > min_occurence]
 
-            if len(pre_bi_vocab_list) > max_vocabulary_size:
-                pre_bi_vocab_list = pre_bi_vocab_list[:max_vocabulary_size]
+                logger.info("Total Syllable Last Vocabulary Size (w.o rare words): %d" % len(syllable_last_vocab_list))
 
-            if len(post_vocab_list) > max_vocabulary_size:
-                post_vocab_list = post_vocab_list[:max_vocabulary_size]
-            if len(post_bi_vocab_list) > max_vocabulary_size:
-                post_bi_vocab_list = post_bi_vocab_list[:max_vocabulary_size]
+                if len(syllable_last_vocab_list) > max_vocabulary_size:
+                    syllable_last_vocab_list = syllable_last_vocab_list[:max_vocabulary_size]
+
+            if syllable_postions[3]:
+                syllable_last2_vocab_list = _START_VOCAB + sorted(syllable_last2_vocab,key=syllable_last2_vocab.get, reverse=True)
+                logger.info("Total Syllable Last 2 Vocabulary Size: %d" % len(syllable_last2_vocab_list))
+                logger.info("Total Syllable Last 2 SingleTon Size: %d" % len(syllable_last2_singletons))
+                syllable_last2_vocab_list = [syllable_last2_word for syllable_last2_word
+                                             in syllable_last2_vocab_list if syllable_last2_word
+                                             in _START_VOCAB or syllable_last2_vocab[syllable_last2_word] > min_occurence]
+                logger.info("Total Syllable Last 2 Vocabulary Size (w.o rare words): %d" % len(syllable_last2_vocab_list))
+
+                if len(syllable_last2_vocab_list) > max_vocabulary_size:
+                    syllable_last2_vocab_list = syllable_last2_vocab_list[:max_vocabulary_size]
 
         if len(vocab_list) > max_vocabulary_size:
             vocab_list = vocab_list[:max_vocabulary_size]
@@ -299,31 +334,41 @@ def create_alphabets(alphabet_directory, train_path, data_paths=None, max_vocabu
                 word_alphabet.add_singleton(word_alphabet.get_index(word))
 
         if end_to_end:
+            if syllable_postions[0]:
+                for syllable_begin_word in syllable_begin_vocab_list:
+                    syllable_begin_alphabet.add(syllable_begin_word)
+                    if syllable_begin_word in syllable_begin_singletons:
+                        syllable_begin_alphabet.add_singleton(syllable_begin_alphabet.get_index(syllable_begin_word))
+            if syllable_postions[1]:
+                for syllable_begin2_word in syllable_begin2_vocab_list:
+                    syllable_begin2_alphabet.add(syllable_begin2_word)
+                    if syllable_begin2_word in syllable_begin2_singletons:
+                        syllable_begin2_alphabet.add_singleton(syllable_begin2_alphabet.get_index(syllable_begin2_word))
 
-            for pre_word,pre_bi_word,post_word,post_bi_word in zip(pre_vocab_list,pre_bi_vocab_list,post_vocab_list,post_bi_vocab_list):
-
-                pre_alphabet.add(pre_word)
-                if pre_word in pre_singletons:
-                    pre_alphabet.add_singleton(pre_alphabet.get_index(pre_word))
-
-                pre_bi_alphabet.add(pre_bi_word)
-                if pre_bi_word in pre_bi_singletons:
-                    pre_bi_alphabet.add_singleton(pre_bi_alphabet.get_index(pre_bi_word))
-
-                post_alphabet.add(post_word)
-                if post_word in post_singletons:
-                    post_alphabet.add_singleton(post_alphabet.get_index(post_word))
-
-                post_bi_alphabet.add(post_bi_word)
-                if post_bi_word in post_bi_singletons:
-                    post_bi_alphabet.add_singleton(post_bi_alphabet.get_index(post_bi_word))
+            if syllable_postions[2]:
+                for syllable_last_word in syllable_last_vocab_list:
+                    syllable_last_alphabet.add(syllable_last_word)
+                    if syllable_last_word in syllable_last_singletons:
+                        syllable_last_alphabet.add_singleton(syllable_last_alphabet.get_index(syllable_last_word))
+            if syllable_postions[3]:
+                for syllable_last2_word in syllable_last2_vocab_list:
+                    syllable_last2_alphabet.add(syllable_last2_word)
+                    if syllable_last2_word in syllable_last2_singletons:
+                        syllable_last2_alphabet.add_singleton(syllable_last2_alphabet.get_index(syllable_last2_word))
 
         word_alphabet.save(alphabet_directory)
         if end_to_end:
-            pre_alphabet.save(alphabet_directory)
-            pre_bi_alphabet.save(alphabet_directory)
-            post_alphabet.save(alphabet_directory)
-            post_bi_alphabet.save(alphabet_directory)
+            if syllable_postions[0]:
+                syllable_begin_alphabet.save(alphabet_directory)
+
+            if syllable_postions[1]:
+                syllable_begin2_alphabet.save(alphabet_directory)
+
+            if syllable_postions[2]:
+                syllable_last_alphabet.save(alphabet_directory)
+
+            if syllable_postions[3]:
+                syllable_last2_alphabet.save(alphabet_directory)
 
         char_alphabet.save(alphabet_directory)
         pos_alphabet.save(alphabet_directory)
@@ -331,10 +376,14 @@ def create_alphabets(alphabet_directory, train_path, data_paths=None, max_vocabu
     else:
         word_alphabet.load(alphabet_directory)
         if end_to_end:
-            pre_alphabet.load(alphabet_directory)
-            pre_bi_alphabet.load(alphebet_directory)
-            post_alphabet.load(alphabet_directory)
-            post_bi_alphabet.load(alphabet_directory)
+            if syllable_postions[0]:
+                syllable_begin_alphabet.load(alphabet_directory)
+            if syllable_postions[1]:
+                syllable_begin2_alphabet.load(alphebet_directory)
+            if syllable_postions[2]:
+                syllable_last_alphabet.load(alphabet_directory)
+            if syllable_postions[3]:
+                syllable_last2_alphabet.load(alphabet_directory)
 
         char_alphabet.load(alphabet_directory)
         pos_alphabet.load(alphabet_directory)
@@ -342,10 +391,14 @@ def create_alphabets(alphabet_directory, train_path, data_paths=None, max_vocabu
 
     word_alphabet.close()
     if end_to_end:
-        pre_alphabet.close()
-        pre_bi_alphabet.close()
-        post_alphabet.close()
-        post_bi_alphabet.close()
+        if syllable_postions[0]:
+            syllable_begin_alphabet.close()
+        if syllable_postions[1]:
+            syllable_begin2_alphabet.close()
+        if syllable_postions[2]:
+            syllable_last_alphabet.close()
+        if syllable_postions[3]:
+            syllable_last2_alphabet.close()
 
 
     char_alphabet.close()
@@ -354,16 +407,28 @@ def create_alphabets(alphabet_directory, train_path, data_paths=None, max_vocabu
     logger.info("Word Alphabet Size (Singleton): %d (%d)" % (word_alphabet.size(), word_alphabet.singleton_size()))
 
     if end_to_end:
-        logger.info("Prefix Word Alphabet Size (Singleton): %d (%d)" % (pre_alphabet.size(), pre_alphabet.singleton_size()))
-        logger.info("Postfix Word Alphabet Size (Singleton): %d (%d)" % (post_alphabet.size(), post_alphabet.singleton_size()))
-        logger.info("Postfix BI Word Alphabet Size (Singleton): %d (%d)" % (post_bi_alphabet.size(), post_bi_alphabet.singleton_size()))
+        logger.info("Prefix Word Alphabet Size (Singleton): %d (%d)" % (syllable_begin_alphabet.size(), syllable_begin_alphabet.singleton_size()))
+        logger.info("Postfix Word Alphabet Size (Singleton): %d (%d)" % (syllable_last_alphabet.size(), syllable_last_alphabet.singleton_size()))
+        logger.info("Postfix BI Word Alphabet Size (Singleton): %d (%d)" % (syllable_last2_alphabet.size(), syllable_last2_alphabet.singleton_size()))
 
     logger.info("Character Alphabet Size (Singleton): %d (%d)" % (char_alphabet.size(), char_alphabet.singleton_size()))
     logger.info("POS Alphabet Size (Singleton): %d (%d)" % (pos_alphabet.size(), pos_alphabet.singleton_size()))
     logger.info("Type Alphabet Size: %d" % type_alphabet.size())
 
     if end_to_end:
-        return (word_alphabet,pre_alphabet,post_alphabet,post_bi_alphabet,pre_bi_alphabet),char_alphabet,post_alphabet,type_alphabet
+        syllable_alphabets = [None for _ in range(4)]
+        if syllable_postions[0]:
+            syllable_alphabets[0] = syllable_begin_alphabet
+
+        if syllable_postions[1]:
+            syllable_alphabets[1] = syllable_begin2_alphabet
+
+        if syllable_postions[2]:
+            syllable_alphabets[2] = syllable_last_alphabet
+        if syllable_postions[3]:
+            syllable_alphabets[3] = syllable_last2_alphabet
+
+        return (word_alphabet, syllable_alphabets), char_alphabet, syllable_last_alphabet, type_alphabet
 
     return word_alphabet, char_alphabet, pos_alphabet, type_alphabet
 

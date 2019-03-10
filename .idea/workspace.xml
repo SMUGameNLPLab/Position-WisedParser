@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b76c53d0-ce5b-454e-a11c-1e5bb99ee4f9" name="Default Changelist" comment="" />
+    <list default="true" id="b76c53d0-ce5b-454e-a11c-1e5bb99ee4f9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StackPointerParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/StackPointerParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StackPointerParser_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/StackPointerParser_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/neuronlp2/io/conllx_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/neuronlp2/io/conllx_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/neuronlp2/io/conllx_stacked_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/neuronlp2/io/conllx_stacked_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/neuronlp2/io/reader.py" beforeDir="false" afterPath="$PROJECT_DIR$/neuronlp2/io/reader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/neuronlp2/models/parsing.py" beforeDir="false" afterPath="$PROJECT_DIR$/neuronlp2/models/parsing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/neuronlp2/nn/_functions/skipconnect_rnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/neuronlp2/nn/_functions/skipconnect_rnn.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -9,15 +18,16 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/KoreanDependencyParserusingStackPointer_master$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1546577113747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Syllable_Position_based_Parser$sejong_8_1_1_end_to_end_CNN.coverage" NAME="sejong_8_1_1_end-to-end_CNN Coverage Results" MODIFIED="1552135872410" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/KoreanDependencyParserusingStackPointer_master$sejong_8_1_1_end_to_end.coverage" NAME="sejong_8_1_1_end-to-end Coverage Results" MODIFIED="1547630334288" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/end_to_end_dependency_parser$sejong_8_1_1_end_to_end.coverage" NAME="sejong_8_1_1_end-to-end Coverage Results" MODIFIED="1548555943192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/KoreanDependencyParserusingStackPointer_master$sejong__1_.coverage" NAME="sejong_with_kkma Coverage Results" MODIFIED="1547004613362" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/KoreanDependencyParserusingStackPointer_master$sejong_8_1_1.coverage" NAME="sejong_8_1_1 Coverage Results" MODIFIED="1547298928676" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/KoreanDependencyParserusingStackPointer_master$sejong.coverage" NAME="sejong Coverage Results" MODIFIED="1547003674142" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/end_to_end_dependency_parser$sejong_8_1_1_end_to_end_CNN.coverage" NAME="sejong_8_1_1_end-to-end_CNN Coverage Results" MODIFIED="1549101991483" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/end_to_end_dependency_parser$sejong_8_1_1_end_to_end.coverage" NAME="sejong_8_1_1_end-to-end Coverage Results" MODIFIED="1548555943192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/KoreanDependencyParserusingStackPointer_master$sejong_8_1_1_kkma.coverage" NAME="sejong_8_1_1_kkma Coverage Results" MODIFIED="1547787919541" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/KoreanDependencyParserusingStackPointer_master$sejong_8_1_1.coverage" NAME="sejong_8_1_1 Coverage Results" MODIFIED="1547298928676" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/KoreanDependencyParserusingStackPointer_master$sejong_8_1_1word2vec.coverage" NAME="sejong_8_1_1word2vec Coverage Results" MODIFIED="1548078429193" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/KoreanDependencyParserusingStackPointer_master$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1546577113747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/KoreanDependencyParserusingStackPointer_master$sejong__1_.coverage" NAME="sejong_with_kkma Coverage Results" MODIFIED="1547004613362" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/end_to_end_dependency_parser$sejong_8_1_1_end_to_end_CNN.coverage" NAME="sejong_8_1_1_end-to-end_CNN Coverage Results" MODIFIED="1549101991483" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -119,17 +129,44 @@
         </counts>
       </usages-collector>
     </session>
+    <session id="-738972243">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.4" value="1" />
+          <entry key="project.opened" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="py" value="6656" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Python" value="6656" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="py" value="31" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Python" value="31" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/StackPointerParser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="37" column="34" selection-start-line="37" selection-start-column="34" selection-end-line="37" selection-end-column="34" />
-              <folding>
-                <marker date="1549093379870" expanded="true" signature="12993:15796" ph="..." />
-              </folding>
+            <state relative-caret-position="145">
+              <caret line="236" column="66" selection-start-line="236" selection-start-column="37" selection-end-line="236" selection-end-column="66" />
             </state>
           </provider>
         </entry>
@@ -137,8 +174,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/neuronlp2/io/conllx_stacked_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8493">
-              <caret line="454" column="72" selection-start-line="454" selection-start-column="67" selection-end-line="454" selection-end-column="72" />
+            <state relative-caret-position="-256">
+              <caret line="321" selection-start-line="321" selection-end-line="321" />
               <folding>
                 <element signature="e#20#38#0" expanded="true" />
               </folding>
@@ -149,12 +186,47 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/neuronlp2/models/parsing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="13471">
-              <caret line="961" selection-start-line="961" selection-end-line="961" />
+            <state relative-caret-position="133">
+              <caret line="311" selection-start-line="311" selection-end-line="311" />
               <folding>
                 <element signature="e#20#31#0" expanded="true" />
-                <element signature="e#596#12146#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/torch/nn/modules/module.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="133">
+              <caret line="476" selection-start-line="476" selection-end-line="476" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/neuronlp2/nn/modules/variational_rnn.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="193">
+              <caret line="59" column="8" selection-start-line="59" selection-start-column="8" selection-end-line="59" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/neuronlp2/nn/modules/skipconnect_rnn.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="133">
+              <caret line="590" selection-start-line="590" selection-end-line="590" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/neuronlp2/nn/_functions/skipconnect_rnn.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="256">
+              <caret line="152" column="21" lean-forward="true" selection-start-line="152" selection-start-column="21" selection-end-line="152" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -170,15 +242,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>util</find>
-      <find>DIGITS</find>
-      <find>getne</find>
-      <find>getNext</find>
-      <find>word</find>
-      <find>word_dim</find>
-      <find>embedd</find>
-      <find>get_encoder_output</find>
-      <find>fast</find>
       <find>post_words</find>
       <find>get_enco</find>
       <find>init</find>
@@ -200,30 +263,42 @@
       <find>max_char</find>
       <find>loss</find>
       <find>char_f</find>
+      <find>use</find>
+      <find>__pre_alphabet</find>
+      <find>syllable_positions</find>
+      <find>Embedding</find>
+      <find>embed</find>
+      <find>word</find>
+      <find>num</find>
+      <find>SkipConnectFastLSTM</find>
+      <find>mask</find>
     </findStrings>
     <replaceStrings>
       <replace>utf-8-sig</replace>
       <replace>torch.tanh</replace>
     </replaceStrings>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/neuronlp2/nlinalg/nlinalg.py" />
-        <option value="$PROJECT_DIR$/neuronlp2/nn/_functions/skipconnect_rnn.py" />
         <option value="$PROJECT_DIR$/neuronlp2/nn/_functions/variational_rnn.py" />
         <option value="$PROJECT_DIR$/neuronlp2/nn/modules/attention.py" />
         <option value="$PROJECT_DIR$/neuronlp2/io/writer.py" />
         <option value="$PROJECT_DIR$/neuronlp2/tasks/parser.py" />
         <option value="$PROJECT_DIR$/visualization.py" />
         <option value="$PROJECT_DIR$/StackPointerParser_test.py" />
-        <option value="$PROJECT_DIR$/../A3C/agents/pytorchNetwork.py" />
+        <option value="$USER_HOME$/A3C/agents/pytorchNetwork.py" />
         <option value="$PROJECT_DIR$/neuronlp2/io/instance.py" />
-        <option value="$PROJECT_DIR$/neuronlp2/io/reader.py" />
         <option value="$PROJECT_DIR$/neuronlp2/io/conllx_data.py" />
-        <option value="$PROJECT_DIR$/neuronlp2/io/conllx_stacked_data.py" />
+        <option value="$PROJECT_DIR$/neuronlp2/io/reader.py" />
         <option value="$PROJECT_DIR$/StackPointerParser.py" />
+        <option value="$PROJECT_DIR$/neuronlp2/io/conllx_stacked_data.py" />
         <option value="$PROJECT_DIR$/neuronlp2/models/parsing.py" />
+        <option value="$PROJECT_DIR$/neuronlp2/nn/_functions/skipconnect_rnn.py" />
       </list>
     </option>
   </component>
@@ -233,11 +308,10 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-2373" />
-    <option name="y" value="128" />
-    <option name="width" value="1936" />
-    <option name="height" value="1216" />
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="877" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -249,13 +323,19 @@
         <subPane>
           <expand>
             <path>
-              <item name="end_to_end_dependency_parser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="end_to_end_dependency_parser" type="462c0819:PsiDirectoryNode" />
+              <item name="Syllable-Position-based-Parser" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Syllable-Position-based-Parser" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="end_to_end_dependency_parser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="end_to_end_dependency_parser" type="462c0819:PsiDirectoryNode" />
-              <item name="corpus" type="462c0819:PsiDirectoryNode" />
+              <item name="Syllable-Position-based-Parser" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Syllable-Position-based-Parser" type="462c0819:PsiDirectoryNode" />
+              <item name="neuronlp2" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Syllable-Position-based-Parser" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Syllable-Position-based-Parser" type="462c0819:PsiDirectoryNode" />
+              <item name="neuronlp2" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -266,7 +346,7 @@
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/Jeon/Desktop/end_to_end_dependency_parser/neuronlp2/models/parsing.py" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../A3C" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
@@ -408,14 +488,14 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\Jeon\Anaconda3\python.exe" />
+      <option name="SDK_HOME" value="/usr/local/bin/python3" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/StackPointerParser.py" />
-      <option name="PARAMETERS" value="--word_embedding random --char_embedding random --pos_embedding random --train &quot;corpus/sejong_8_1_1_train.conllu&quot; --dev &quot;corpus/sejong_8_1_1_dev.conllu&quot; --test &quot;corpus/sejong_8_1_1_test.conllu&quot; --model_path &quot;sejong_8_1_1_endtoend_cnn_char_cnn&quot; --model_name &quot;sejong_8_1_1_endtoend_cnn_char_cnn.pt&quot; --grandPar --sibling --skipConnect --prior_order &quot;left2right&quot; --use_gpu --end_to_end" />
+      <option name="PARAMETERS" value="--word_embedding random --char_embedding random --pos_embedding random --train &quot;corpus/sejong_8_1_1_train.conllu&quot; --dev &quot;corpus/sejong_8_1_1_dev.conllu&quot; --test &quot;corpus/sejong_8_1_1_test.conllu&quot; --model_path &quot;sejong_8_1_1_endtoend_cnn_char_cnn&quot; --model_name &quot;sejong_8_1_1_endtoend_cnn_char_cnn.pt&quot; --grandPar --sibling --skipConnect --prior_order &quot;left2right&quot; --end_to_end --syllable_begin --syllable_begin2 --syllable_last --syllable_last2" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -546,11 +626,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1928" y="-8" width="1936" height="1216" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="877" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.20042644" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.20600858" />
       <window_info id="Structure" order="2" weight="0.25266525" />
       <window_info anchor="bottom" id="Database Changes" order="0" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="1" weight="0.32917964" />
@@ -560,8 +640,8 @@
       <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" sideWeight="0.49946696" weight="0.32963988" />
-      <window_info active="true" anchor="bottom" id="Run" order="8" sideWeight="0.4978678" visible="true" weight="0.25946444" />
-      <window_info anchor="bottom" id="Debug" order="9" weight="0.43028623" />
+      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.4978678" weight="0.25732484" />
+      <window_info anchor="bottom" id="Debug" order="9" weight="0.42929935" />
       <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="12" weight="0.3271028" />
@@ -580,61 +660,69 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/neuronlp2/nn/_functions/skipconnect_rnn.py</url>
+          <line>140</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="input_char.shape" language="Python" />
-        <watch expression="input_word[0].shape" language="Python" />
-        <watch expression="char.shape" language="Python" />
-        <watch expression="char_size" language="Python" />
-        <watch expression="word[0].shape" language="Python" />
-        <watch expression="word.shape" language="Python" />
+        <watch expression="word.size()" language="Python" />
+        <watch expression="mask.size()" language="Python" />
+        <watch expression="mask[i].size()" language="Python" />
+        <watch expression="noise_hidden" language="Python" />
+        <watch expression="noise_in" language="Python" />
       </configuration>
     </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
       <expression>
-        <expression-string>word[0].shape</expression-string>
+        <expression-string>noise_in</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>word.shape</expression-string>
+        <expression-string>noise_hidden</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>char_size</expression-string>
+        <expression-string>i</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>char.shape</expression-string>
+        <expression-string>mask[i].size()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>input_word[0].shape</expression-string>
+        <expression-string>mask_d.size()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>input_word.shape</expression-string>
+        <expression-string>mask.size()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>input_char.shape</expression-string>
+        <expression-string>mask</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>input_char</expression-string>
+        <expression-string>word.size()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>char</expression-string>
+        <expression-string>word.size</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -646,15 +734,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/models/alphabets/character.json" />
-    <entry file="file://$PROJECT_DIR$/models/alphabets/type.json" />
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3/typing.pyi">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="521" column="8" selection-start-line="521" selection-start-column="8" selection-end-line="521" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/neuronlp2/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="418">
@@ -669,28 +748,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/modules/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="11" column="17" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/modules/utils.py" />
     <entry file="file://$PROJECT_DIR$/models/alphabets/word.json" />
-    <entry file="file://$PROJECT_DIR$/tmp/0e3810gold_dev2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="57" lean-forward="true" selection-start-line="5" selection-start-column="57" selection-end-line="5" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/corpus/ko_kaist-ud-dev.conllu">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="41" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/tmp/0e3810gold_dev2" />
+    <entry file="file://$PROJECT_DIR$/corpus/ko_kaist-ud-dev.conllu" />
     <entry file="file://$PROJECT_DIR$/neuronlp2/io/alphabet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="437">
@@ -699,15 +760,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/corpus/dev.txt" />
-    <entry file="file://$PROJECT_DIR$/../attention-is-all-you-need-pytorch-master/preprocess.py" />
+    <entry file="file://$USER_HOME$/attention-is-all-you-need-pytorch-master/preprocess.py" />
     <entry file="file://$PROJECT_DIR$/models/4de433_sejong_model.pt.arg.json" />
-    <entry file="file://$PROJECT_DIR$/corpus/ko_kaist-ud-train.conllu">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/corpus/ko_kaist-ud-train.conllu" />
     <entry file="file://$PROJECT_DIR$/neuronlp2/models/sequence_labeling.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1824" />
@@ -718,57 +773,13 @@
         <state relative-caret-position="-912" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/neuronlp2/nn/_functions/skipconnect_rnn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="32" column="4" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/functional.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="994" selection-start-line="994" selection-end-line="994" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/modules/container.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="120" selection-start-line="120" selection-end-line="120" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/parameter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/corpus/sejong_train_1000.conllu">
-      <provider selected="true" editor-type-id="LargeFileEditor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/corpus/sejong_8_1_1_train.conllu">
-      <provider selected="true" editor-type-id="LargeFileEditor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/corpus/sejong_test.conllu">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/corpus/sejong_train.conllu">
-      <provider selected="true" editor-type-id="LargeFileEditor">
-        <state relative-caret-position="57">
-          <caret line="3" column="36" selection-start-line="3" selection-start-column="36" selection-end-line="3" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/neuronlp2/nn/modules/skipconnect_rnn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15219">
-          <caret line="801" column="39" selection-start-line="801" selection-start-column="25" selection-end-line="801" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/functional.py" />
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/modules/container.py" />
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/parameter.py" />
+    <entry file="file://$PROJECT_DIR$/corpus/sejong_train_1000.conllu" />
+    <entry file="file://$PROJECT_DIR$/corpus/sejong_8_1_1_train.conllu" />
+    <entry file="file://$PROJECT_DIR$/corpus/sejong_test.conllu" />
+    <entry file="file://$PROJECT_DIR$/corpus/sejong_train.conllu" />
     <entry file="file://$PROJECT_DIR$/neuronlp2/nn/modules/attention.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="464">
@@ -783,33 +794,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/modules/module.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="577">
-          <caret line="517" selection-start-line="517" selection-end-line="517" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/modules/module.py" />
     <entry file="file://$PROJECT_DIR$/graph/graph.png" />
-    <entry file="file://$PROJECT_DIR$/StackPointerParser_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3078">
-          <caret line="166" column="18" selection-start-line="166" selection-start-column="8" selection-end-line="166" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../A3C2/agents/a3c_agent.py" />
-    <entry file="file://$PROJECT_DIR$/../A3C/agents/pytorchNetwork.py" />
-    <entry file="file://$PROJECT_DIR$/Digraph.gv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/test.png" />
+    <entry file="file://$USER_HOME$/A3C2/agents/a3c_agent.py" />
+    <entry file="file://$USER_HOME$/A3C/agents/pytorchNetwork.py" />
+    <entry file="file://$PROJECT_DIR$/Digraph.gv" />
     <entry file="file://$PROJECT_DIR$/neuronlp2/tasks/parser.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="399">
@@ -824,19 +814,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/corpus/sejong_8_1_1_dev.conllu">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/corpus/sejong_dev.conllu">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/neuronlp2/nn/modules/variational_rnn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-479">
-          <caret line="585" selection-start-line="585" selection-end-line="585" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/corpus/sejong_8_1_1_dev.conllu" />
+    <entry file="file://$PROJECT_DIR$/corpus/sejong_dev.conllu" />
     <entry file="file://$PROJECT_DIR$/visualization.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -844,20 +823,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/neuronlp2/nn/modules/sparse.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
-          <caret line="48" selection-start-line="48" selection-end-line="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/modules/conv.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="300" selection-start-line="300" selection-end-line="300" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/modules/conv.py" />
     <entry file="file://$PROJECT_DIR$/neuronlp2/nn/_functions/variational_rnn.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="874">
@@ -865,9 +831,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sejong_8_1_1_endtoend_cnn/844361_sejong_8_1_1_endtoend_cnn.pt">
-      <provider selected="true" editor-type-id="LargeFileEditor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/sejong_8_1_1_endtoend_cnn/844361_sejong_8_1_1_endtoend_cnn.pt" />
     <entry file="file://$PROJECT_DIR$/neuronlp2/io/instance.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -875,59 +839,104 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/modules/rnn.py">
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/modules/rnn.py" />
+    <entry file="file://$PROJECT_DIR$/neuronlp2/io/conllx_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="125" selection-start-line="125" selection-end-line="125" />
+        <state relative-caret-position="418">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
+          <folding>
+            <element signature="e#20#34#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/neuronlp2/io/reader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1932">
-          <caret line="132" selection-start-line="132" selection-end-line="132" />
+        <state relative-caret-position="285">
+          <caret line="23" column="68" selection-start-line="23" selection-start-column="68" selection-end-line="23" selection-end-column="68" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/neuronlp2/io/conllx_data.py">
+    <entry file="file://$PROJECT_DIR$/neuronlp2/nn/modules/sparse.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4554">
-          <caret line="43" column="4" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="4" />
-          <folding>
-            <element signature="e#20#34#0" expanded="true" />
-            <element signature="e#1035#3532#0" />
-          </folding>
+        <state relative-caret-position="93">
+          <caret line="90" selection-start-line="90" selection-end-line="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StackPointerParser_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="393">
+          <caret line="166" column="18" selection-start-line="166" selection-start-column="8" selection-end-line="166" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/torch/nn/functional.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="1109" selection-start-line="1109" selection-end-line="1109" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/torch/nn/modules/sparse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="109" selection-start-line="109" selection-end-line="109" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/StackPointerParser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="37" column="34" selection-start-line="37" selection-start-column="34" selection-end-line="37" selection-end-column="34" />
-          <folding>
-            <marker date="1549093379870" expanded="true" signature="12993:15796" ph="..." />
-          </folding>
+        <state relative-caret-position="145">
+          <caret line="236" column="66" selection-start-line="236" selection-start-column="37" selection-end-line="236" selection-end-column="66" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/neuronlp2/io/conllx_stacked_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8493">
-          <caret line="454" column="72" selection-start-line="454" selection-start-column="67" selection-end-line="454" selection-end-column="72" />
+        <state relative-caret-position="-256">
+          <caret line="321" selection-start-line="321" selection-end-line="321" />
           <folding>
             <element signature="e#20#38#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/neuronlp2/nn/modules/variational_rnn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="59" column="8" selection-start-line="59" selection-start-column="8" selection-end-line="59" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/neuronlp2/models/parsing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="13471">
-          <caret line="961" selection-start-line="961" selection-end-line="961" />
+        <state relative-caret-position="133">
+          <caret line="311" selection-start-line="311" selection-end-line="311" />
           <folding>
             <element signature="e#20#31#0" expanded="true" />
-            <element signature="e#596#12146#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/torch/nn/modules/module.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="476" selection-start-line="476" selection-end-line="476" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/neuronlp2/nn/modules/skipconnect_rnn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="590" selection-start-line="590" selection-end-line="590" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/neuronlp2/nn/_functions/skipconnect_rnn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="152" column="21" lean-forward="true" selection-start-line="152" selection-start-column="21" selection-end-line="152" selection-end-column="21" />
         </state>
       </provider>
     </entry>

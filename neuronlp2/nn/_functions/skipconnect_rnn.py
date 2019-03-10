@@ -137,9 +137,11 @@ def SkipConnectRecurrent(reverse=False):
         # create batch index
         batch_index = torch.arange(0, h0.size(0)).type_as(skip_connect)
         for i in steps:
+
             if mask is None or mask[i].data.min() > 0.5:
                 hidden_skip = output[skip_connect[i], batch_index]
                 hidden = cell(input[i], hidden, hidden_skip)
+
             elif mask[i].data.max() > 0.5:
                 hidden_skip = output[skip_connect[i], batch_index]
                 hidden_next = cell(input[i], hidden, hidden_skip)
@@ -150,6 +152,7 @@ def SkipConnectRecurrent(reverse=False):
                     hidden = (hx + (hp1 - hx) * mask[i], cx + (cp1 - cx) * mask[i])
                 else:
                     hidden = hidden + (hidden_next - hidden) * mask[i]
+
             # hack to handle LSTM
             if reverse:
                 output[i] = hidden[0] if isinstance(hidden, tuple) else hidden

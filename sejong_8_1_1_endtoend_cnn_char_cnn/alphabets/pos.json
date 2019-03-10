@@ -1,0 +1,13 @@
+{
+    "instance2index": {
+        "_PAD_POS": 1,
+        "_ROOT_POS": 2,
+        "_END_POS": 3
+    },
+    "instances": [
+        "_PAD_POS",
+        "_ROOT_POS",
+        "_END_POS"
+    ],
+    "singletions": []
+}

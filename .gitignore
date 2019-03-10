@@ -106,3 +106,4 @@ venv.bak/
 # Corpus
 *.conllu
 ./corpus/
+/corpus/word2vec

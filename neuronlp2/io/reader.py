@@ -8,22 +8,35 @@ from konlpy.tag import Kkma
 
 
 class CoNLLXReader(object):
-    def __init__(self, file_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet,kkma=False,end_to_end=False):
+    def __init__(self, file_path, word_alphabet, char_alphabet, pos_alphabet, type_alphabet,kkma=False,end_to_end=False,
+                 syllable_positions=None):
         self.__source_file = open(file_path, 'r', encoding='utf-8-sig')
         if end_to_end:
             self.__word_alphabet = word_alphabet[0]
-            self.__pre_alphabet = word_alphabet[1]
-            self.__post_alphabet = word_alphabet[2]
-            self.__post_bi_alphabet = word_alphabet[3]
-            self.__pre_bi_alphabet = word_alphabet[4]
+
+            if syllable_positions[0]:
+                self.__syllable_begin_alphabet = word_alphabet[1][0]
+            if syllable_positions[1]:
+                self.__syllable_begin2_alphabet = word_alphabet[1][1]
+            if syllable_positions[2]:
+                self.__syllable_last_alphabet = word_alphabet[1][2]
+            if syllable_positions[3]:
+                self.__syllable_last2_alphabet = word_alphabet[1][3]
 
         else:
             self.__word_alphabet = word_alphabet
         self.__char_alphabet = char_alphabet
         self.__pos_alphabet = pos_alphabet
         self.__type_alphabet = type_alphabet
+
         self.kkma = kkma
         self.end_to_end = end_to_end
+
+        self.syllable_begin = syllable_positions[0]
+        self.syllable_begin2 = syllable_positions[1]
+        self.syllable_last = syllable_positions[2]
+        self.syllable_last2 = syllable_positions[3]
+
         if kkma:
             self.kkma = Kkma()
 
@@ -78,16 +91,16 @@ class CoNLLXReader(object):
                 word_id_seqs.append(self.__word_alphabet.get_index(ROOT))
 
                 pre_word_seqs.append(ROOT)
-                pre_word_id_seqs.append(self.__pre_alphabet.get_index(ROOT))
+                pre_word_id_seqs.append(self.__syllable_begin_alphabet.get_index(ROOT))
 
                 post_word_seqs.append(ROOT)
-                post_word_id_seqs.append(self.__post_alphabet.get_index(ROOT))
+                post_word_id_seqs.append(self.__syllable_last_alphabet.get_index(ROOT))
 
                 post_bi_word_seqs.append(ROOT)
-                post_bi_word_id_seqs.append(self.__post_bi_alphabet.get_index(ROOT))
+                post_bi_word_id_seqs.append(self.__syllable_last2_alphabet.get_index(ROOT))
 
                 pre_bi_word_seqs.append(ROOT)
-                pre_bi_word_id_seqs.append(self.__pre_bi_alphabet.get_index(ROOT))
+                pre_bi_word_id_seqs.append(self.__syllable_begin2_alphabet.get_index(ROOT))
 
                 char_seqs.append([ROOT_CHAR,])
                 char_id_seqs.append(([self.__char_alphabet.get_index(ROOT_CHAR)]))
@@ -138,10 +151,10 @@ class CoNLLXReader(object):
                 char_seqs.append(chars)
 
                 word_id_seqs.append(self.__word_alphabet.get_index(word))
-                pre_word_id_seqs.append(self.__pre_alphabet.get_index(pre_word))
-                post_word_id_seqs.append(self.__post_alphabet.get_index(post_word))
-                post_bi_word_id_seqs.append(self.__post_bi_alphabet.get_index(post_bi_word))
-                pre_bi_word_id_seqs.append(self.__pre_bi_alphabet.get_index(pre_bi_word))
+                pre_word_id_seqs.append(self.__syllable_begin_alphabet.get_index(pre_word))
+                post_word_id_seqs.append(self.__syllable_last_alphabet.get_index(post_word))
+                post_bi_word_id_seqs.append(self.__syllable_last2_alphabet.get_index(post_bi_word))
+                pre_bi_word_id_seqs.append(self.__syllable_begin2_alphabet.get_index(pre_bi_word))
                 char_id_seqs.append(char_id)
 
             else:
@@ -230,13 +243,13 @@ class CoNLLXReader(object):
                 word_seqs.append(END)
                 word_id_seqs.append(self.__word_alphabet.get_index(END))
                 pre_word_seqs.append(END)
-                pre_word_id_seqs.append(self.__pre_alphabet.get_index(END))
+                pre_word_id_seqs.append(self.__syllable_begin_alphabet.get_index(END))
                 post_word_seqs.append(END)
-                post_word_id_seqs.append(self.__post_alphabet.get_index(END))
+                post_word_id_seqs.append(self.__syllable_last_alphabet.get_index(END))
                 post_bi_word_seqs.append(END)
-                post_bi_word_id_seqs.append(self.__post_bi_alphabet.get_index(END))
+                post_bi_word_id_seqs.append(self.__syllable_last2_alphabet.get_index(END))
                 pre_bi_word_seqs.append(END)
-                pre_bi_word_id_seqs.append(self.__pre_bi_alphabet.get_index(END))
+                pre_bi_word_id_seqs.append(self.__syllable_begin2_alphabet.get_index(END))
 
             else:
                 word_seqs.append([END, ])
