@@ -2,5 +2,5 @@
 End-to-End Dependency Parser for Korean using Position-wised Embedding
 
 # requirements
-pytorch == 0.4.1
+pytorch == 0.4.1<br>
 Gensim
